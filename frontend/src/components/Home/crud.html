@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>Product CRUD</title>
+
+  <link rel="stylesheet" href="../src/components/Styles/crud.css">
+</head>
+
+<body>
+
+  <h1>Add a product</h1>
+
+  <div class="container">
+
+    <h2>Add / Edit Product</h2>
+
+    <input type="text" id="name" placeholder="Product Name">
+    <input type="text" id="price" placeholder="Price">
+    <input type="text" id="size" placeholder="Size (S, M, L...)">
+
+    <button onclick="saveProduct()">Save Product</button>
+
+    <h2>Product List</h2>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Price</th>
+          <th>Size</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+
+      <tbody id="productTable"></tbody>
+    </table>
+
+  </div>
+
+  <script src="./crud.js"></script>
+
+</body>
+</html>

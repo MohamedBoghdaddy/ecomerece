@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Shopping Cart</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background: #f0f2f5;
+    display: flex;
+    gap: 40px;
+    padding: 40px;
+  }
+
+  .product, .cart {
+    background: #fff;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+  }
+
+  .product {
+    width: 220px;
+  }
+
+  .product h3 {
+    margin: 0 0 10px;
+    font-size: 18px;
+  }
+
+  .product p {
+    margin: 0 0 15px;
+    font-size: 16px;
+  }
+
+  .product select, .product input[type=number] {
+    margin-bottom: 10px;
+    width: 100%;
+    padding: 6px 8px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+  }
+
+  button {
+    padding: 10px 15px;
+    background: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    width: 100%;
+    font-size: 15px;
+  }
+
+  .cart {
+    width: 350px;
+  }
+
+  .cart h3 {
+    margin: 0 0 15px;
+    font-size: 18px;
+  }
+
+  #cart-items div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid #eee;
+    font-size: 15px;
+  }
+
+  .remove-btn {
+    background: #dc3545;
+    font-size: 12px;
+    padding: 4px 8px;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+
+  .cart-qty {
+    width: 50px;
+    padding: 4px 6px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+    margin-left: 10px;
+  }
+
+  #total {
+    font-weight: bold;
+    font-size: 17px;
+    margin-top: 10px;
+    display: block;
+  }
+</style>
+</head>
+<body>
+
+<div class="product">
+  <h3>Classic T-Shirt</h3>
+  <p>$25</p>
+  <select id="size">
+    <option value="S">Small</option>
+    <option value="M" selected>Medium</option>
+    <option value="L">Large</option>
+    <option value="XL">XL</option>
+  </select>
+  <input type="number" id="qty" value="1" min="1">
+  <button onclick="addToCart('Classic T-Shirt', 25)">Add to Cart</button>
+</div>
+
+<div class="product">
+  <h3>Hoodie</h3>
+  <p>$45</p>
+  <select id="size2">
+    <option value="S">Small</option>
+    <option value="M" selected>Medium</option>
+    <option value="L">Large</option>
+    <option value="XL">XL</option>
+  </select>
+  <input type="number" id="qty2" value="1" min="1">
+  <button onclick="addToCart('Hoodie', 45)">Add to Cart</button>
+</div>
+
+<div class="cart">
+  <h3>Cart</h3>
+  <div id="cart-items"></div>
+  <p>Total: $<span id="total">0.00</span></p>
+</div>
+
+<script>
+  let cart = [];
+
+  function addToCart(name, price){
+    let qty = 1;
+    if(name === "Classic T-Shirt") qty = parseInt(document.getElementById("qty").value);
+    if(name === "Hoodie") qty = parseInt(document.getElementById("qty2").value);
+    const item = cart.find(i => i.name === name);
+    if(item){ item.qty += qty; }
+    else{ cart.push({name, price, qty}); }
+    renderCart();
+  }
+
+  function removeFromCart(name){
+    cart = cart.filter(i => i.name !== name);
+    renderCart();
+  }
+
+  function updateQty(name, newQty){
+    const item = cart.find(i => i.name === name);
+    if(item){
+      item.qty = parseInt(newQty);
+      if(item.qty <= 0) removeFromCart(name);
+    }
+    renderCart();
+  }
+
+  function renderCart(){
+    const items = document.getElementById("cart-items");
+    items.innerHTML = "";
+    let total = 0;
+    cart.forEach(i => {
+      total += i.price * i.qty;
+      items.innerHTML += `
+        <div>
+          <span>${i.name} — $${i.price}</span>
+          <span>
+            <input type="number" class="cart-qty" value="${i.qty}" min="0" onchange="updateQty('${i.name}', this.value)">
+            <span class="remove-btn" onclick="removeFromCart('${i.name}')">Remove</span>
+          </span>
+        </div>`;
+    });
+    document.getElementById("total").textContent = total.toFixed(2);
+  }
+</script>
+
+</body>
+</html>

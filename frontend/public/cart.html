@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Shop & Cart</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: Arial;
+  background: #f0f2f5;
+  padding: 25px;
+}
+
+/* NAVBAR */
+.navbar {
+  background: white;
+  padding: 15px 20px;
+  display: flex;
+  gap: 25px;
+  border-bottom: 1px solid #eee;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+  margin-bottom: 25px;
+}
+
+.navbar a {
+  text-decoration: none;
+  font-size: 16px;
+  color: #007bff;
+  font-weight: bold;
+}
+.navbar a:hover { text-decoration: underline; }
+
+/* LAYOUT */
+.wrapper {
+  display: flex;
+  gap: 40px;
+}
+
+/* PRODUCT CARD */
+.product {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  width: 220px;
+  box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+}
+
+.product h3 { margin: 0 0 10px; }
+.product p { margin: 0 0 15px; }
+
+input[type=number] {
+  width: 100%;
+  padding: 7px 8px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  margin-bottom: 10px;
+}
+
+button {
+  width: 100%;
+  padding: 10px;
+  background: #007bff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+/* CART */
+.cart {
+  background: white;
+  padding: 20px;
+  width: 350px;
+  border-radius: 12px;
+  box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+}
+
+#cart-items div {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.cart-qty {
+  width: 50px;
+  padding: 5px;
+}
+
+.remove-btn {
+  background: #dc3545;
+  padding: 5px 8px;
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 12px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="navbar">
+  <a href="crud.html">Manage Products</a>
+  <a href="cart.html">Shop / Cart</a>
+  <a href="favorite.html">Favourites</a>
+</div>
+
+<div class="wrapper">
+  <div id="shop"></div>
+
+  <div class="cart">
+    <h3>Your Cart</h3>
+    <div id="cart-items"></div>
+    <p>Total: $<span id="total">0.00</span></p>
+  </div>
+</div>
+
+<script>
+let products = JSON.parse(localStorage.getItem("products")) || [];
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+function loadShop() {
+  const shop = document.getElementById("shop");
+  shop.innerHTML = "";
+
+  products.forEach((p, i) => {
+    shop.innerHTML += `
+      <div class="product">
+        <h3>${p.name}</h3>
+        <p>$${p.price}</p>
+
+        <input type="number" id="qty${i}" value="1" min="1">
+        <button onclick="addToCart(${i})">Add to Cart</button>
+      </div>
+    `;
+  });
+}
+
+function addToCart(index) {
+  const p = products[index];
+  const qty = parseInt(document.getElementById("qty" + index).value);
+
+  const item = cart.find(i => i.name === p.name);
+  if (item) item.qty += qty;
+  else cart.push({ name: p.name, price: p.price, qty });
+
+  localStorage.setItem("cart", JSON.stringify(cart));
+  renderCart();
+}
+
+function renderCart() {
+  const items = document.getElementById("cart-items");
+  items.innerHTML = "";
+  let total = 0;
+
+  cart.forEach((item, i) => {
+    total += item.price * item.qty;
+    items.innerHTML += `
+      <div>
+        <span>${item.name} – $${item.price}</span>
+        <span>
+          <input class="cart-qty" type="number" value="${item.qty}" 
+                 onchange="updateQty(${i}, this.value)">
+          <span class="remove-btn" onclick="removeItem(${i})">Remove</span>
+        </span>
+      </div>
+    `;
+  });
+
+  document.getElementById("total").textContent = total.toFixed(2);
+  localStorage.setItem("cart", JSON.stringify(cart));
+}
+
+function updateQty(i, qty) {
+  cart[i].qty = parseInt(qty);
+  if (cart[i].qty <= 0) cart.splice(i, 1);
+  renderCart();
+}
+
+function removeItem(i) {
+  cart.splice(i, 1);
+  renderCart();
+}
+
+window.onload = function() {
+  loadShop();
+  renderCart();
+};
+</script>
+
+</body>
+</html>

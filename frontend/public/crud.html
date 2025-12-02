@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Product CRUD</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: Arial;
+  background: #f0f2f5;
+}
+
+/* NAVBAR */
+.navbar {
+  background: white;
+  padding: 15px 20px;
+  display: flex;
+  gap: 25px;
+  border-bottom: 1px solid #eee;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+  position: sticky;
+  top: 0;
+}
+
+.navbar a {
+  text-decoration: none;
+  font-size: 16px;
+  color: #007bff;
+  font-weight: bold;
+}
+
+.navbar a:hover {
+  text-decoration: underline;
+}
+
+/* PAGE */
+.container {
+  background: white;
+  padding: 25px;
+  margin: 40px auto;
+  width: 500px;
+  border-radius: 12px;
+  box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+}
+
+input {
+  width: 100%;
+  padding: 10px;
+  margin: 7px 0;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+button {
+  width: 100%;
+  font-size: 16px;
+  padding: 10px;
+  margin-top: 10px;
+  background: #007bff;
+  border: none;
+  color: white;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+table {
+  width: 100%;
+  margin-top: 20px;
+  border-collapse: collapse;
+}
+
+table td, table th {
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+}
+
+.action-btn {
+  background: #28a745;
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  color: white;
+  border: none;
+}
+
+.delete-btn {
+  background: #dc3545;
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  color: white;
+  border: none;
+}
+</style>
+</head>
+
+<body>
+
+<div class="navbar">
+  <a href="crud.html">Manage Products</a>
+  <a href="cart.html">Shop / Cart</a>
+  <a href="favorite.html">Favourites</a>
+</div>
+
+<div class="container">
+  <h2>Add or Edit Product</h2>
+
+  <input type="text" id="name" placeholder="Product Name">
+  <input type="number" id="price" placeholder="Price">
+  <input type="text" id="size" placeholder="Size (S/M/L etc.)">
+
+  <button onclick="saveProduct()">Save Product</button>
+
+  <h2>Product List</h2>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Price</th>
+        <th>Size</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody id="productTable"></tbody>
+  </table>
+
+</div>
+
+<script>
+let products = JSON.parse(localStorage.getItem("products")) || [];
+let editIndex = -1;
+
+function saveProduct() {
+  const name = document.getElementById("name").value;
+  const price = document.getElementById("price").value;
+  const size = document.getElementById("size").value;
+
+  if (!name || !price || !size) return alert("Fill all fields!");
+
+  if (editIndex >= 0) {
+    products[editIndex] = { name, price, size };
+    editIndex = -1;
+  } else {
+    products.push({ name, price, size });
+  }
+
+  localStorage.setItem("products", JSON.stringify(products));
+  loadProducts();
+  clearInputs();
+}
+
+function clearInputs() {
+  document.getElementById("name").value = "";
+  document.getElementById("price").value = "";
+  document.getElementById("size").value = "";
+}
+
+function loadProducts() {
+  const table = document.getElementById("productTable");
+  table.innerHTML = "";
+
+  products.forEach((p, i) => {
+    table.innerHTML += `
+      <tr>
+        <td>${p.name}</td>
+        <td>${p.price}</td>
+        <td>${p.size}</td>
+        <td>
+          <button class="action-btn" onclick="editProduct(${i})">Edit</button>
+          <button class="delete-btn" onclick="deleteProduct(${i})">Delete</button>
+        </td>
+      </tr>
+    `;
+  });
+}
+
+function editProduct(i) {
+  const p = products[i];
+  document.getElementById("name").value = p.name;
+  document.getElementById("price").value = p.price;
+  document.getElementById("size").value = p.size;
+  editIndex = i;
+}
+
+function deleteProduct(i) {
+  products.splice(i, 1);
+  localStorage.setItem("products", JSON.stringify(products));
+  loadProducts();
+}
+
+window.onload = loadProducts;
+</script>
+
+</body>
+</html>

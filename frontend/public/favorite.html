@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Favorites</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: Arial;
+  background: #f0f2f5;
+  padding: 25px;
+}
+
+/* NAVBAR */
+.navbar {
+  background: white;
+  padding: 15px 20px;
+  display: flex;
+  gap: 25px;
+  border-bottom: 1px solid #eee;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+  margin-bottom: 25px;
+}
+
+.navbar a {
+  text-decoration: none;
+  font-size: 16px;
+  color: #007bff;
+  font-weight: bold;
+}
+
+.navbar a:hover {
+  text-decoration: underline;
+}
+
+/* PRODUCT LIST */
+.product {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  width: 220px;
+  display: inline-block;
+  margin: 10px;
+  text-align: center;
+  box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+}
+
+button {
+  padding: 10px;
+  width: 100%;
+  background: #007bff;
+  border: none;
+  border-radius: 8px;
+  color: white;
+  cursor: pointer;
+}
+
+#favList {
+  background: white;
+  padding: 20px;
+  margin-top: 20px;
+  width: 260px;
+  border-radius: 12px;
+  box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+}
+</style>
+</head>
+
+<body>
+
+<div class="navbar">
+  <a href="crud.html">Manage Products</a>
+  <a href="cart.html">Shop / Cart</a>
+  <a href="favorite.html">Favourites</a>
+</div>
+
+<h2>Products</h2>
+<div id="favProducts"></div>
+
+<h3>Your Favourites</h3>
+<div id="favList"></div>
+
+<script>
+let products = JSON.parse(localStorage.getItem("products")) || [];
+let favourites = JSON.parse(localStorage.getItem("favourites")) || [];
+
+function loadProducts() {
+  const container = document.getElementById("favProducts");
+  container.innerHTML = "";
+
+  products.forEach((p) => {
+    container.innerHTML += `
+      <div class="product">
+        <p>${p.name} — $${p.price}</p>
+        <button onclick="addFav('${p.name}')">♡ Favourite</button>
+      </div>
+    `;
+  });
+}
+
+function addFav(name) {
+  if (!favourites.includes(name)) {
+    favourites.push(name);
+    localStorage.setItem("favourites", JSON.stringify(favourites));
+    renderFav();
+  }
+}
+
+function renderFav() {
+  document.getElementById("favList").innerHTML =
+    favourites.length === 0
+      ? "No favourites yet."
+      : favourites.join("<br>");
+}
+
+window.onload = function() {
+  loadProducts();
+  renderFav();
+};
+</script>
+
+</body>
+</html>
