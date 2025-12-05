@@ -5,190 +5,166 @@
 <title>Shop & Cart</title>
 
 <style>
+/* ================================
+🎨 BASE STYLES
+================================ */
 body {
   margin: 0;
-  font-family: Arial;
-  background: #f0f2f5;
-  padding: 25px;
+  padding: 2rem;
+  font-family: "Segoe UI", Arial, sans-serif;
+  background: #f1f5f9;
+  color: #1e293b;
+  margin-top: 20%;
 }
 
-/* NAVBAR */
-.navbar {
-  background: white;
-  padding: 15px 20px;
-  display: flex;
-  gap: 25px;
-  border-bottom: 1px solid #eee;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-  margin-bottom: 25px;
-}
-
-.navbar a {
-  text-decoration: none;
-  font-size: 16px;
-  color: #007bff;
-  font-weight: bold;
-}
-.navbar a:hover { text-decoration: underline; }
-
-/* LAYOUT */
+/* ================================
+🧱 LAYOUT
+================================ */
 .wrapper {
   display: flex;
-  gap: 40px;
+  gap: 45px;
+  align-items: flex-start;
 }
 
-/* PRODUCT CARD */
+/* ================================
+🛒 PRODUCT CARD
+================================ */
 .product {
   background: white;
-  padding: 20px;
-  border-radius: 12px;
-  width: 220px;
-  box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+  padding: 18px;
+  width: 230px;
+  border-radius: 14px;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.10);
+  transition: 0.2s;
 }
 
-.product h3 { margin: 0 0 10px; }
-.product p { margin: 0 0 15px; }
+.product:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 22px rgba(0,0,0,0.15);
+}
 
-input[type=number] {
+.product img {
   width: 100%;
-  padding: 7px 8px;
+  height: 130px;
+  border-radius: 10px;
+  object-fit: cover;
+  margin-bottom: 10px;
+}
+
+.product h3 {
+  margin-bottom: 6px;
+  font-size: 18px;
+}
+
+.product p {
+  margin-bottom: 12px;
+  color: #475569;
+}
+
+.qty-input {
+  width: 100%;
+  padding: 7px;
   border-radius: 6px;
-  border: 1px solid #ccc;
+  border: 1px solid #cbd5e1;
   margin-bottom: 10px;
 }
 
 button {
   width: 100%;
   padding: 10px;
-  background: #007bff;
-  color: white;
-  border: none;
+  background: #2563eb;
   border-radius: 8px;
+  color: white;
   cursor: pointer;
+  font-weight: 600;
+  border: none;
 }
 
-/* CART */
+button:hover {
+  background: #1d4ed8;
+}
+
+/* ================================
+🛒 CART BOX
+================================ */
 .cart {
   background: white;
-  padding: 20px;
-  width: 350px;
-  border-radius: 12px;
-  box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+  padding: 22px;
+  width: 360px;
+  border-radius: 14px;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.10);
 }
 
 #cart-items div {
   display: flex;
   justify-content: space-between;
-  padding: 8px 0;
-  border-bottom: 1px solid #eee;
+  padding: 9px 0;
+  border-bottom: 1px solid #e2e8f0;
 }
 
 .cart-qty {
-  width: 50px;
-  padding: 5px;
+  width: 55px;
+  padding: 6px;
+  border-radius: 6px;
+  border: 1px solid #94a3b8;
 }
 
 .remove-btn {
-  background: #dc3545;
-  padding: 5px 8px;
-  color: white;
+  background: #ef4444;
+  padding: 6px 8px;
   border-radius: 6px;
+  color: white;
   cursor: pointer;
   font-size: 12px;
 }
-</style>
-</head>
 
+.remove-btn:hover {
+  background: #dc2626;
+}
+
+/* ================================
+✨ SKELETON LOADER
+================================ */
+.skeleton {
+  animation: shimmer 1.3s infinite;
+  background: linear-gradient(90deg, #e2e8f0 25%, #f8fafc 50%, #e2e8f0 75%);
+  background-size: 200% 100%;
+  border-radius: 10px;
+}
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.skeleton-card {
+  width: 230px;
+  height: 260px;
+  margin-bottom: 15px;
+  border-radius: 14px;
+}
+</style>
+
+</head>
 <body>
 
-<div class="navbar">
-  <a href="crud.html">Manage Products</a>
-  <a href="cart.html">Shop / Cart</a>
-  <a href="favorite.html">Favourites</a>
-</div>
 
+
+<!-- MAIN UI -->
 <div class="wrapper">
   <div id="shop"></div>
 
   <div class="cart">
     <h3>Your Cart</h3>
     <div id="cart-items"></div>
-    <p>Total: $<span id="total">0.00</span></p>
+    <p style="font-size:18px; margin-top:12px;">
+      Total: <strong>$<span id="total">0.00</span></strong>
+    </p>
   </div>
 </div>
 
-<script>
-let products = JSON.parse(localStorage.getItem("products")) || [];
-let cart = JSON.parse(localStorage.getItem("cart")) || [];
-
-function loadShop() {
-  const shop = document.getElementById("shop");
-  shop.innerHTML = "";
-
-  products.forEach((p, i) => {
-    shop.innerHTML += `
-      <div class="product">
-        <h3>${p.name}</h3>
-        <p>$${p.price}</p>
-
-        <input type="number" id="qty${i}" value="1" min="1">
-        <button onclick="addToCart(${i})">Add to Cart</button>
-      </div>
-    `;
-  });
-}
-
-function addToCart(index) {
-  const p = products[index];
-  const qty = parseInt(document.getElementById("qty" + index).value);
-
-  const item = cart.find(i => i.name === p.name);
-  if (item) item.qty += qty;
-  else cart.push({ name: p.name, price: p.price, qty });
-
-  localStorage.setItem("cart", JSON.stringify(cart));
-  renderCart();
-}
-
-function renderCart() {
-  const items = document.getElementById("cart-items");
-  items.innerHTML = "";
-  let total = 0;
-
-  cart.forEach((item, i) => {
-    total += item.price * item.qty;
-    items.innerHTML += `
-      <div>
-        <span>${item.name} – $${item.price}</span>
-        <span>
-          <input class="cart-qty" type="number" value="${item.qty}" 
-                 onchange="updateQty(${i}, this.value)">
-          <span class="remove-btn" onclick="removeItem(${i})">Remove</span>
-        </span>
-      </div>
-    `;
-  });
-
-  document.getElementById("total").textContent = total.toFixed(2);
-  localStorage.setItem("cart", JSON.stringify(cart));
-}
-
-function updateQty(i, qty) {
-  cart[i].qty = parseInt(qty);
-  if (cart[i].qty <= 0) cart.splice(i, 1);
-  renderCart();
-}
-
-function removeItem(i) {
-  cart.splice(i, 1);
-  renderCart();
-}
-
-window.onload = function() {
-  loadShop();
-  renderCart();
-};
-</script>
+<!-- JS MODULE -->
+<script type="module" src="js/cart.js"></script>
 
 </body>
 </html>
