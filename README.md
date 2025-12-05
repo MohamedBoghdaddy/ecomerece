@@ -54,7 +54,7 @@ Context API → Lightweight global state without Redux overhead.
 ![Favorites (Wishlist)](./images/fav.png)  
 
 
-# Product Brand Logo
+### Product Brand Logo
 ![Product Brand Logo](./images/eco-logo.png)  
 
 
