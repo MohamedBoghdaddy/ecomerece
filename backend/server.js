@@ -19,14 +19,8 @@ import morgan from "morgan";
 
 // 🌍 Route Imports
 import userRoutes from "./routes/userroutes.js";
-// import adminRoutes from "./routes/adminRoutes.js";
-// import teacherRoutes from "./routes/teacherRoutes.js";
-// import studentRoutes from "./routes/studentRoutes.js";
-// import workspaceRoutes from "./routes/workspaceRoutes.js";
-// import documentRoutes from "./routes/documentRoutes.js";
-// import analyticRoutes from "./routes/analyticRoutes.js";
-// import "./cron/cleanupCron.js";
-
+import profuctRoutes from"./routes/productRoutes.js";
+import favoriteRoutes from "./routes/favoriteRoutes.js";
 // 📁 Path Setup
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -150,12 +144,8 @@ app.use(
 
 // 🧩 API Routes (Only those that exist in your backend)
 app.use("/api/users", userRoutes);
-// app.use("/api/admin", adminRoutes);
-// app.use("/api/teachers", teacherRoutes);
-// app.use("/api/students", studentRoutes);
-// app.use("/api/workspaces", workspaceRoutes);
-// app.use("/api/documents", documentRoutes);
-// app.use("/analytics", analyticRoutes);
+app.use("/products", profuctRoutes)
+app.use("/favorite", favoriteRoutes)
 
 // ⚛️ Root Health Check
 app.get("/", (req, res) => {
