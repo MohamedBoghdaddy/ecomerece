@@ -1,12 +1,5 @@
 import { useState } from "react";
-import {
-  Navbar,
-  Nav,
-  Container,
-  Form,
-  NavDropdown,
-  Modal,
-} from "react-bootstrap";
+import { Navbar, Nav, Container, NavDropdown, Modal } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faMagnifyingGlass,
@@ -21,16 +14,14 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "../Styles/navbar.css";
 import Login from "../LOGIN&REGISTRATION/Login/Login.js";
 import { useAuthContext } from "../context/AuthContext";
-import SearchResultsList from "./SearchResult";
 
 const NavBar = () => {
   const [searchText, setSearchText] = useState("");
-  const [showDropdown, setShowDropdown] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [searchResults, setSearchResults] = useState([]);
   const [expanded, setExpanded] = useState(false);
 
-  // 🔥 Safe Auth destructuring
+  // 🔥 Safe Auth Context
   const auth = useAuthContext() || {};
   const { user = null, isAuthenticated = false, logout } = auth;
 
@@ -54,10 +45,6 @@ const NavBar = () => {
     }
   };
 
-  const handleLoginModalOpen = () => setShowLoginModal(true);
-  const handleLoginModalClose = () => setShowLoginModal(false);
-  const handleNavCollapse = () => setExpanded(!expanded);
-
   const handleLogout = async () => {
     if (logout) await logout();
     navigate("/");
@@ -70,12 +57,12 @@ const NavBar = () => {
       fixed="top"
     >
       <Container className="nav-inner">
-        {/* Logo */}
+        {/* 🔹 Logo */}
         <Navbar.Brand as={Link} to="/" className="nav-logo">
           <img src={logo} alt="HEDJ Logo" />
         </Navbar.Brand>
 
-        {/* Toggler */}
+        {/* 🔹 Toggler */}
         <Navbar.Toggle
           aria-controls="nav-menu"
           className="nav-toggler"
@@ -84,10 +71,12 @@ const NavBar = () => {
 
         <Navbar.Collapse id="nav-menu">
           <Nav className="ms-auto nav-links">
+            {/* Home */}
             <Nav.Link as={Link} to="/" className="nav-item-link">
               Home
             </Nav.Link>
 
+            {/* Products Dropdown */}
             <NavDropdown
               title="Products"
               id="nav-products"
@@ -111,20 +100,24 @@ const NavBar = () => {
               ))}
             </NavDropdown>
 
+            {/* Contact */}
             <Nav.Link as={Link} to="/contact" className="nav-item-link">
               Contact
             </Nav.Link>
 
-            <Nav.Link as={Link} to="./CrudPage.js" className="nav-item-link">
+            {/* CRUD Page */}
+            <Nav.Link as={Link} to="/crud" className="nav-item-link">
               CRUD Products
             </Nav.Link>
 
-            {/* Icons Group */}
+            {/* 🔹 Icons Group */}
             <Nav className="nav-icons">
-              <Nav.Link as={Link} to="/wishlist" className="icon-link">
+              {/* Wishlist */}
+              <Nav.Link as={Link} to="/favorite" className="icon-link">
                 <FontAwesomeIcon icon={faHeart} />
               </Nav.Link>
 
+              {/* User / Login */}
               {isAuthenticated ? (
                 <Nav.Link onClick={handleLogout} className="icon-link">
                   <FontAwesomeIcon icon={faSignOutAlt} />
@@ -138,26 +131,28 @@ const NavBar = () => {
                 </Nav.Link>
               )}
 
-              <Nav.Link as={Link} to="../../../public/cart.html" className="icon-link">
+              {/* 🔥 CART → React Route that loads /public/cart.html */}
+              <Nav.Link as={Link} to="/cart" className="icon-link">
                 <FontAwesomeIcon icon={faCartShopping} />
                 <span className="cart-count">0</span>
               </Nav.Link>
             </Nav>
           </Nav>
 
-          {/* Search */}
+          {/* 🔹 Search Box */}
           <div className="premium-search">
             <input
               type="text"
               placeholder="Search"
               value={searchText}
               onChange={(e) => setSearchText(e.target.value)}
+              onKeyPress={handleKeyPress}
             />
             <FontAwesomeIcon icon={faMagnifyingGlass} className="search-icon" />
           </div>
         </Navbar.Collapse>
 
-        {/* Login Modal */}
+        {/* 🔹 Login Modal */}
         <Modal
           show={showLoginModal}
           onHide={() => setShowLoginModal(false)}
