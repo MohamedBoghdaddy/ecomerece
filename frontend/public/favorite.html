@@ -2,122 +2,197 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Favorites</title>
+<title>Favourites</title>
 
 <style>
+/* ================================
+🎨 Global Styles
+================================ */
 body {
   margin: 0;
-  font-family: Arial;
-  background: #f0f2f5;
-  padding: 25px;
+  padding: 2.5rem;
+  font-family: "Segoe UI", Arial, sans-serif;
+  background: linear-gradient(180deg, #f5f7fa 0%, #e2e8f0 100%);
+  color: #1f2937;
+  margin-top: 20%;
 }
 
-/* NAVBAR */
-.navbar {
-  background: white;
-  padding: 15px 20px;
-  display: flex;
-  gap: 25px;
-  border-bottom: 1px solid #eee;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-  margin-bottom: 25px;
-}
-
-.navbar a {
-  text-decoration: none;
-  font-size: 16px;
-  color: #007bff;
-  font-weight: bold;
-}
-
-.navbar a:hover {
-  text-decoration: underline;
-}
-
-/* PRODUCT LIST */
-.product {
-  background: white;
-  padding: 20px;
-  border-radius: 12px;
-  width: 220px;
-  display: inline-block;
-  margin: 10px;
-  text-align: center;
-  box-shadow: 0 6px 15px rgba(0,0,0,0.1);
-}
-
-button {
-  padding: 10px;
-  width: 100%;
-  background: #007bff;
-  border: none;
-  border-radius: 8px;
+/* ================================
+❤️ Navbar Favorite Badge
+================================ */
+.fav-badge {
+  background: red;
   color: white;
-  cursor: pointer;
+  padding: 3px 8px;
+  font-size: 12px;
+  border-radius: 10px;
+  margin-left: 6px;
 }
 
-#favList {
+/* ================================
+🧭 Header
+================================ */
+.page-header {
+  margin: 2rem 0 1.5rem;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #1e3a8a;
+}
+
+/* ================================
+🛒 Skeleton Loader
+================================ */
+.skeleton {
+  animation: shimmer 1.2s infinite;
+  background: linear-gradient(90deg, #e0e0e0 25%, #f4f4f4 50%, #e0e0e0 75%);
+  background-size: 200% 100%;
+}
+
+@keyframes shimmer {
+  0% { background-position: 200% 0 }
+  100% { background-position: -200% 0 }
+}
+
+.skeleton-card {
+  height: 240px;
+  border-radius: 14px;
+}
+
+.skeleton-line {
+  height: 16px;
+  margin: 8px 0;
+  border-radius: 6px;
+}
+
+/* ================================
+🛒 Product Grid
+================================ */
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+}
+
+.product-card {
+  background: white;
+  border-radius: 14px;
+  padding: 1.2rem 1.4rem;
+  text-align: center;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+  transition: 0.2s;
+}
+
+.product-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+}
+
+.product-card img {
+  width: 100%;
+  height: 140px;
+  object-fit: cover;
+  border-radius: 10px;
+  margin-bottom: 8px;
+}
+
+.heart {
+  font-size: 22px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.heart.active {
+  color: red;
+}
+
+/* ================================
+📌 Product Modal Popup
+================================ */
+.modal-bg {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  display: none;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal {
   background: white;
   padding: 20px;
-  margin-top: 20px;
-  width: 260px;
-  border-radius: 12px;
-  box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+  border-radius: 14px;
+  width: 380px;
+  text-align: center;
+}
+
+.modal img {
+  width: 100%;
+  border-radius: 10px;
+  margin-bottom: 10px;
+}
+
+.modal h3 {
+  margin: 10px 0;
+  color: #1f2937;
+  font-size: 20px;
+}
+
+/* ================================
+❤️ Favourites List
+================================ */
+.fav-section {
+  background: white;
+  border-radius: 14px;
+  padding: 1.6rem;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+  max-width: 420px;
+}
+
+.fav-item {
+  background: #f8fafc;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.6rem;
+  border-left: 4px solid #3b82f6;
+}
+
+.remove-btn {
+  background: #ef4444;
+  color: white;
+  border-radius: 6px;
+  padding: 4px 8px;
+  cursor: pointer;
 }
 </style>
 </head>
 
 <body>
 
-<div class="navbar">
-  <a href="crud.html">Manage Products</a>
-  <a href="cart.html">Shop / Cart</a>
-  <a href="favorite.html">Favourites</a>
+<!-- Simulated Navbar Badge -->
+<div style="font-size:18px; margin-bottom:20px;">
+  ❤️ Favorites <span id="favCount" class="fav-badge">0</span>
 </div>
 
-<h2>Products</h2>
-<div id="favProducts"></div>
+<!-- PAGE HEADER -->
+<h2 class="page-header">Products</h2>
+<div id="favProducts" class="products-grid"></div>
 
-<h3>Your Favourites</h3>
-<div id="favList"></div>
+<h3 class="page-header">Your Favourites</h3>
+<div id="favList" class="fav-section"></div>
 
-<script>
-let products = JSON.parse(localStorage.getItem("products")) || [];
-let favourites = JSON.parse(localStorage.getItem("favourites")) || [];
+<!-- Modal Container (Filled by modal.js) -->
+<div id="modalContainer"></div>
 
-function loadProducts() {
-  const container = document.getElementById("favProducts");
-  container.innerHTML = "";
+<!-- JS MODULE IMPORTS -->
+<script type="module">
+  import { setupModal } from "./js/modal.js";
+  import "./js/favorites.js";
 
-  products.forEach((p) => {
-    container.innerHTML += `
-      <div class="product">
-        <p>${p.name} — $${p.price}</p>
-        <button onclick="addFav('${p.name}')">♡ Favourite</button>
-      </div>
-    `;
-  });
-}
-
-function addFav(name) {
-  if (!favourites.includes(name)) {
-    favourites.push(name);
-    localStorage.setItem("favourites", JSON.stringify(favourites));
-    renderFav();
-  }
-}
-
-function renderFav() {
-  document.getElementById("favList").innerHTML =
-    favourites.length === 0
-      ? "No favourites yet."
-      : favourites.join("<br>");
-}
-
-window.onload = function() {
-  loadProducts();
-  renderFav();
-};
+  // Inject the modal HTML dynamically
+  setupModal();
 </script>
 
 </body>
