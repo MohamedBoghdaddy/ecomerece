@@ -1,28 +1,94 @@
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background: #f0f2f5;
+/* Modal Background */
+.modal-bg {
+  position: fixed;
+  inset: 0;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  background: rgba(0,0,0,0.6);
+  z-index: 1000;
+  opacity: 0;
+  transition: opacity .2s ease;
 }
 
-/* NAVBAR */
-.navbar {
+.modal-bg.modal-show {
+  display: flex !important;
+  opacity: 1;
+}
+
+/* Modal Box */
+.modal {
   background: white;
-  padding: 15px 20px;
-  display: flex;
-  gap: 25px;
-  border-bottom: 1px solid #eee;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-  position: sticky;
-  top: 0;
+  padding: 20px;
+  width: 380px;
+  border-radius: 14px;
+  text-align: center;
+  animation: pop .2s ease;
 }
 
-.navbar a {
-  text-decoration: none;
-  font-size: 16px;
-  color: #007bff;
-  font-weight: bold;
+@keyframes pop {
+  from { transform: scale(.8); opacity: 0; }
+  to   { transform: scale(1); opacity: 1; }
 }
 
-.navbar a:hover {
-  text-decoration: underline;
+.modal img {
+  width: 100%;
+  border-radius: 10px;
+  margin-bottom: 10px;
 }
+
+.modal-close-btn {
+  margin-top: 10px;
+  background: #1e3a8a;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+}
+.modal-close-btn:hover {
+  background: #142a63;
+}
+
+
+/* Skeleton shimmer effect */
+.skeleton {
+  animation: shimmer 1.2s infinite;
+  background: linear-gradient(90deg, #e0e0e0 25%, #f4f4f4 50%, #e0e0e0 75%);
+  background-size: 200% 100%;
+}
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.skeleton-card {
+  height: 240px;
+  border-radius: 14px;
+}
+
+.skeleton-line {
+  height: 16px;
+  border-radius: 6px;
+  margin: 8px 0;
+}
+.toast {
+  position: fixed;
+  bottom: 25px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #1e40af;
+  color: white;
+  padding: 12px 20px;
+  border-radius: 10px;
+  font-size: 14px;
+  box-shadow: 0 5px 18px rgba(0,0,0,0.2);
+  opacity: 0;
+  transition: opacity 0.35s;
+  z-index: 999;
+}
+
+.toast-success { background: #10b981; }
+.toast-error   { background: #ef4444; }
+.toast-info    { background: #3b82f6; }
