@@ -18,7 +18,7 @@ Search & Filters 🔎 – Quickly locate products using dynamic search results.
 
 Reusable Modular Components ♻️ – Clean architecture with Context API and React components.
 
-3 Technologies Used 🔧
+# Technologies Used 🔧
 Full Stack: MERN
 
 Frontend: React.js, Context API
@@ -43,9 +43,10 @@ Cloudinary → Optimized CDN for image-heavy e-commerce pages.
 
 Context API → Lightweight global state without Redux overhead.
 
-This combination offers speed, scalability, and an optimal developer experience, making it ideal for an evolving e-commerce system.
+### This combination offers speed, scalability, and an optimal developer experience, making it ideal for an evolving e-commerce system.
 
-User Interface & Workflow 🖥️
+# User Interface & Workflow 🖥️
+
 ### Home Page – Modern Storefront
 ![Home Page – Modern Storefront](./images/home.png)  
 
@@ -82,7 +83,7 @@ Backend runs at:
 
 http://localhost:4000
 
-Usage 📦
+# Usage 📦
 
 Once the project is running:
 
