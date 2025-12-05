@@ -11,8 +11,7 @@ import {
   upload,
   updateLoginMeta,
   updateUserRoleOrPassword,
-  deleteUser,
-  restoreUser, // ✅ add this
+
 } from "../controllers/usercontroller.js";
 
 import {
